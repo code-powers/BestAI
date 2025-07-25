@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Best AI Customer Service Challenge</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState } = React;
+
+        function BestAIGame() {
+            const [currentScreen, setCurrentScreen] = useState('welcome');
+            const [currentScenario, setCurrentScenario] = useState(0);
+            const [score, setScore] = useState(0);
+            const [showFeedback, setShowFeedback] = useState(false);
+            const [selectedAnswer, setSelectedAnswer] = useState(null);
+
+            const scenarios = [
+                {
+                    id: "scenario_1",
+                    type: "video",
+                    title: "Scenario 1: Helping a Customer",
+                    videoFile: "scenario1-bad-service.mp4",
+                    videoDescription: "Employee ignoring customer asking about TV - 8 seconds",
+                    scenarioText: "A customer approaches the electronics section looking confused. They clearly want help choosing a TV, but the associate continues stocking shelves without acknowledging them.",
+                    question: "What was the primary customer service issue?",
+                    answers: [
+                        {
+                            text: "Lack of attentiveness",
+                            correct: true,
+                            feedback: "Exactly! Acknowledging customers immediately shows attentiveness. Even a quick 'I'll be right with you!' makes a huge difference."
+                        },
+                        {
+                            text: "Incorrect product knowledge", 
+                            correct: false,
+                            feedback: "The issue wasn't knowledge - the associate never even engaged with the customer to share any knowledge."
+                        },
+                        {
+                            text: "Slow response time",
+                            correct: false,
+                            feedback: "It's more than just slow - the associate completely ignored the customer's presence."
+                        },
+                        {
+                            text: "No issue observed",
+                            correct: false,
+                            feedback: "There's definitely an issue! Customers should be acknowledged promptly when they enter your area."
+                        }
+                    ],
+                    characterTip: "Remember: Acknowledge every customer within 10 seconds, even if you're busy!"
+                },
+                {
+                    id: "scenario_2", 
+                    type: "video",
+                    title: "Scenario 2: Explaining a Product",
+                    videoFile: "scenario2-good-service.mp4",
+                    videoDescription: "Employee listening and explaining tablet features - 8 seconds",
+                    scenarioText: "A customer is interested in tablets but seems overwhelmed by the options. The associate listens carefully to their needs, asks clarifying questions, and explains features in simple terms.",
+                    question: "What made this interaction effective?",
+                    answers: [
+                        {
+                            text: "Clear product knowledge",
+                            correct: false,
+                            feedback: "Knowledge helped, but the key was HOW the associate used that knowledge - by listening first and tailoring the explanation."
+                        },
+                        {
+                            text: "Empathy and active listening",
+                            correct: true,
+                            feedback: "Perfect! The associate listened to understand the customer's actual needs, then explained accordingly. This builds trust and confidence."
+                        },
+                        {
+                            text: "Offering a discount",
+                            correct: false,
+                            feedback: "No discount was mentioned. Great service isn't about price - it's about understanding and helping."
+                        },
+                        {
+                            text: "Quick transaction",
+                            correct: false,
+                            feedback: "Speed isn't always better. Taking time to understand needs leads to better outcomes for everyone."
+                        }
+                    ],
+                    characterTip: "Listen first, then tailor your explanation to what the customer actually needs!"
+                },
+                {
+                    id: "scenario_3",
+                    type: "text", 
+                    title: "Scenario 3: Customer Complaint",
+                    scenarioText: "A customer returns to Best AI after one week with a Bluetooth speaker that stopped working. They seem frustrated. The associate immediately says, 'You probably dropped it. Our return policy only covers unopened items anyway.'",
+                    question: "What should the associate do differently?",
+                    answers: [
+                        {
+                            text: "Listen and offer a solution",
+                            correct: true,
+                            feedback: "Exactly! Listen to understand the problem first, then work together to find a solution. This shows you care about their experience."
+                        },
+                        {
+                            text: "Explain the return policy more firmly",
+                            correct: false,
+                            feedback: "Starting with policy creates conflict. Listen to the problem first, then explore options together."
+                        },
+                        {
+                            text: "Ask for a receipt first",
+                            correct: false,
+                            feedback: "While receipts help, addressing the customer's frustration and understanding the issue should come first."
+                        },
+                        {
+                            text: "Call a manager immediately",
+                            correct: false,
+                            feedback: "Try to help first! Many issues can be resolved without escalation if you listen and show you care."
+                        }
+                    ],
+                    characterTip: "Keep going! You're learning Best AI's service secrets!",
+                    characterMessage: "When customers are upset, listen first - solutions come easier when they feel heard."
+                },
+                {
+                    id: "scenario_4",
+                    type: "text",
+                    title: "Scenario 4: Warranty Upselling", 
+                    scenarioText: "A customer just selected a laptop and is ready to purchase. The associate says, 'You NEED our extended warranty. Trust me, you'll regret not getting it. These laptops always break after a year.'",
+                    question: "What's the main problem with this approach?",
+                    answers: [
+                        {
+                            text: "Being too pushy and fear-based",
+                            correct: true,
+                            feedback: "Correct! Scare tactics and pressure damage trust. Instead, explain warranty benefits and let customers decide what's right for them."
+                        },
+                        {
+                            text: "Not explaining warranty details",
+                            correct: false,
+                            feedback: "The bigger issue is the pushy, fear-based approach. Even with details, this method feels manipulative."
+                        },
+                        {
+                            text: "Wrong timing in the sale",
+                            correct: false,
+                            feedback: "Timing isn't the issue - it's the aggressive, fear-based approach that creates pressure instead of value."
+                        },
+                        {
+                            text: "Warranty isn't needed",
+                            correct: false,
+                            feedback: "Warranties can be valuable! The problem is HOW it's being presented - with pressure instead of helpful information."
+                        }
+                    ],
+                    characterTip: "Almost there! You're mastering customer service!",
+                    characterMessage: "Present options helpfully, not pressurefully. Trust builds sales better than fear."
+                },
+                {
+                    id: "scenario_5",
+                    type: "text",
+                    title: "Scenario 5: Tech Support",
+                    scenarioText: "An elderly customer is struggling to understand how to connect their new smart speaker to WiFi. The associate notices their confusion and says, 'Here, let me show you step-by-step. We can practice it together right here.'",
+                    question: "What makes this interaction successful?",
+                    answers: [
+                        {
+                            text: "Patience and clear explanation",
+                            correct: true,
+                            feedback: "Perfect! Taking time to teach, not just sell, creates confident customers who return and recommend Best AI to others."
+                        },
+                        {
+                            text: "Doing the setup for them",
+                            correct: false,
+                            feedback: "The associate is teaching, not just doing it for them. This empowers the customer to succeed at home."
+                        },
+                        {
+                            text: "Recommending an easier product",
+                            correct: false,
+                            feedback: "The customer chose this product! Helping them succeed with their choice builds more confidence than switching products."
+                        },
+                        {
+                            text: "Scheduling a home visit",
+                            correct: false,
+                            feedback: "That's helpful but not necessary here. Teaching in-store empowers the customer immediately."
+                        }
+                    ],
+                    characterTip: "Final question! Show what you've learned!",
+                    characterMessage: "Patient teaching creates confident customers who become Best AI advocates!"
+                }
+            ];
+
+            const handleAnswer = (answerIndex) => {
+                if (showFeedback) return;
+                
+                const isCorrect = scenarios[currentScenario].answers[answerIndex].correct;
+                if (isCorrect) {
+                    setScore(score + 1);
+                }
+                setSelectedAnswer(answerIndex);
+                setShowFeedback(true);
+            };
+
+            const nextScenario = () => {
+                if (currentScenario < scenarios.length - 1) {
+                    setCurrentScenario(currentScenario + 1);
+                    setShowFeedback(false);
+                    setSelectedAnswer(null);
+                } else {
+                    setCurrentScreen('results');
+                }
+            };
+
+            const restartGame = () => {
+                setCurrentScreen('welcome');
+                setCurrentScenario(0);
+                setScore(0);
+                setShowFeedback(false);
+                setSelectedAnswer(null);
+            };
+
+            const returnToStoryline = () => {
+                if (window.parent && window.parent !== window) {
+                    window.parent.postMessage('gameComplete', '*');
+                } else {
+                    alert('Game completed! Please continue in your course.');
+                }
+            };
+
+            const getPerformanceMessage = () => {
+                const percentage = Math.round((score / scenarios.length) * 100);
+                if (percentage >= 80) {
+                    return {
+                        title: "Best AI Legend!",
+                        message: "Your service skills drive customer loyalty! You understand that great service builds lasting relationships.",
+                        characterMessage: "You're a Best AI Legend! Lead by example!"
+                    };
+                } else if (percentage >= 60) {
+                    return {
+                        title: "Trusted Sales Pro!",
+                        message: "You're developing strong service instincts. Keep practicing these skills for consistent 5-star service.",
+                        characterMessage: "You're becoming a trusted pro! Keep growing!"
+                    };
+                } else {
+                    return {
+                        title: "Rookie Associate!",
+                        message: "You're on your way! Review these scenarios and remember: every customer interaction is a chance to create loyalty.",
+                        characterMessage: "Keep learning - you'll get there! Every expert started as a rookie."
+                    };
+                }
+            };
+
+            // Welcome Screen
+            if (currentScreen === 'welcome') {
+                return React.createElement('div', {
+                    className: "min-h-screen bg-gradient-to-br from-blue-500 to-gray-400 flex items-center justify-center p-4"
+                }, React.createElement('div', {
+                    className: "bg-white rounded-3xl shadow-2xl p-8 max-w-6xl w-full"
+                }, [
+                    React.createElement('div', {
+                        className: "text-center mb-8",
+                        key: "header"
+                    }, [
+                        React.createElement('h1', {
+                            className: "text-5xl font-bold text-blue-600 mb-4",
+                            key: "title"
+                        }, "Best AI Customer Service Challenge"),
+                        React.createElement('p', {
+                            className: "text-xl text-gray-600 mb-6",
+                            key: "subtitle"
+                        }, "Master the art of exceptional customer service")
+                    ]),
+                    
+                    React.createElement('div', {
+                        className: "flex items-center justify-between max-w-4xl mx-auto",
+                        key: "content"
+                    }, [
+                        React.createElement('div', {
+                            className: "flex-1 flex justify-center",
+                            key: "avatar"
+                        }, React.createElement('div', {
+                            className: "text-8xl animate-bounce"
+                        }, "👩‍💼")),
+                        
+                        React.createElement('div', {
+                            className: "flex-1 bg-blue-50 p-6 rounded-xl border-l-4 border-blue-500",
+                            key: "message"
+                        }, React.createElement('p', {
+                            className: "text-lg text-gray-800 leading-relaxed"
+                        }, "Welcome to Best AI! Great service builds loyal customers. Can you spot the difference between good and bad service? Click Start to begin your training!"))
+                    ]),
+                    
+                    React.createElement('div', {
+                        className: "text-center mt-8",
+                        key: "button-container"
+                    }, React.createElement('button', {
+                        onClick: () => setCurrentScreen('game'),
+                        className: "bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-12 rounded-full text-xl transition-all transform hover:scale-105 shadow-lg"
+                    }, "Start Challenge"))
+                ]));
+            }
+
+            // Results Screen
+            if (currentScreen === 'results') {
+                const performance = getPerformanceMessage();
+                const percentage = Math.round((score / scenarios.length) * 100);
+                
+                return React.createElement('div', {
+                    className: "min-h-screen bg-gradient-to-br from-blue-500 to-gray-400 flex items-center justify-center p-4"
+                }, React.createElement('div', {
+                    className: "bg-white rounded-3xl shadow-2xl p-8 max-w-4xl w-full text-center"
+                }, [
+                    React.createElement('h1', {
+                        className: "text-4xl font-bold text-blue-600 mb-6",
+                        key: "results-title"
+                    }, "Your Best AI Service Score"),
+                    
+                    React.createElement('div', {
+                        className: "bg-blue-50 rounded-xl p-8 mb-8",
+                        key: "score-display"
+                    }, [
+                        React.createElement('div', {
+                            className: "text-6xl font-bold text-blue-600 mb-4",
+                            key: "score"
+                        }, `${score}/${scenarios.length} (${percentage}%)`),
+                        React.createElement('h2', {
+                            className: "text-3xl font-bold text-blue-800 mb-4",
+                            key: "performance-title"
+                        }, performance.title),
+                        React.createElement('p', {
+                            className: "text-lg text-gray-700 mb-6",
+                            key: "performance-message"
+                        }, performance.message)
+                    ]),
+                    
+                    React.createElement('div', {
+                        className: "flex items-center justify-center mb-8",
+                        key: "character-feedback"
+                    }, [
+                        React.createElement('div', {
+                            className: "text-6xl mr-6",
+                            key: "character-avatar"
+                        }, "👩‍💼"),
+                        React.createElement('div', {
+                            className: "bg-green-50 p-4 rounded-lg border-l-4 border-green-500",
+                            key: "character-message"
+                        }, React.createElement('p', {
+                            className: "text-lg font-semibold text-green-800"
+                        }, performance.characterMessage))
+                    ]),
+                    
+                    React.createElement('div', {
+                        className: "flex justify-center space-x-4",
+                        key: "action-buttons"
+                    }, [
+                        React.createElement('button', {
+                            onClick: restartGame,
+                            className: "bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-lg transition-colors",
+                            key: "restart-btn"
+                        }, "🎯 Try Again"),
+                        React.createElement('button', {
+                            onClick: () => setCurrentScreen('welcome'),
+                            className: "bg-gray-500 hover:bg-gray-600 text-white font-bold py-3 px-8 rounded-lg transition-colors",
+                            key: "menu-btn"
+                        }, "🏠 Main Menu"),
+                        React.createElement('button', {
+                            onClick: returnToStoryline,
+                            className: "bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-lg transition-colors",
+                            key: "continue-btn"
+                        }, "📚 Continue Course →")
+                    ])
+                ]));
+            }
+
+            // Game Screen
+            const scenario = scenarios[currentScenario];
+            
+            return React.createElement('div', {
+                className: "min-h-screen bg-gray-100 p-4"
+            }, React.createElement('div', {
+                className: "max-w-6xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden"
+            }, [
+                // Header
+                React.createElement('div', {
+                    className: "bg-blue-600 text-white p-6",
+                    key: "header"
+                }, React.createElement('div', {
+                    className: "flex justify-between items-center"
+                }, [
+                    React.createElement('h1', {
+                        className: "text-2xl font-bold",
+                        key: "scenario-title"
+                    }, scenario.title),
+                    React.createElement('div', {
+                        className: "text-lg font-semibold",
+                        key: "progress"
+                    }, `Question ${currentScenario + 1} of ${scenarios.length}`)
+                ])),
+
+                // Content Area
+                React.createElement('div', {
+                    className: "p-8",
+                    key: "content"
+                }, [
+                    // Video/Scenario Section
+                    React.createElement('div', {
+                        className: "mb-8",
+                        key: "video-section"
+                    }, [
+                        scenario.type === 'video' && React.createElement('div', {
+                            className: "bg-gray-900 rounded-lg p-4 mb-6",
+                            key: "video-container"
+                        }, React.createElement('video', {
+                            width: "100%",
+                            height: "400",
+                            controls: true,
+                            autoPlay: true,
+                            muted: true,
+                            className: "rounded-lg shadow-lg",
+                            key: "video-element"
+                        }, [
+                            React.createElement('source', {
+                                src: `./videos/${scenario.videoFile}`,
+                                type: "video/mp4",
+                                key: "video-source"
+                            }),
+                            React.createElement('div', {
+                                className: "text-white text-center p-8",
+                                key: "video-fallback"
+                            }, [
+                                React.createElement('div', {
+                                    className: "text-6xl mb-4",
+                                    key: "fallback-emoji"
+                                }, "🎥"),
+                                React.createElement('p', {
+                                    className: "text-lg",
+                                    key: "fallback-text"
+                                }, `Video not supported - ${scenario.videoDescription}`)
+                            ])
+                        ])),
+                        
+                        React.createElement('div', {
+                            className: "bg-blue-50 rounded-lg p-6 border-l-4 border-blue-500",
+                            key: "scenario-text"
+                        }, React.createElement('p', {
+                            className: "text-lg text-gray-800 leading-relaxed"
+                        }, scenario.scenarioText))
+                    ]),
+
+                    // Character Tip
+                    scenario.characterMessage && React.createElement('div', {
+                        className: "flex items-center mb-6",
+                        key: "character-tip"
+                    }, [
+                        React.createElement('div', {
+                            className: "text-4xl mr-4",
+                            key: "char-avatar"
+                        }, "👩‍💼"),
+                        React.createElement('div', {
+                            className: "bg-yellow-50 p-4 rounded-lg border-l-4 border-yellow-400 flex-1",
+                            key: "char-message"
+                        }, React.createElement('p', {
+                            className: "text-yellow-800 font-medium"
+                        }, scenario.characterMessage))
+                    ]),
+
+                    // Question
+                    React.createElement('div', {
+                        className: "text-center mb-8",
+                        key: "question-section"
+                    }, [
+                        React.createElement('h2', {
+                            className: "text-2xl font-bold text-gray-800 mb-6",
+                            key: "question-text"
+                        }, scenario.question),
+                        
+                        // Answer Grid - 2x2 Layout
+                        React.createElement('div', {
+                            className: "grid grid-cols-2 gap-4 max-w-4xl mx-auto",
+                            key: "answers-grid"
+                        }, scenario.answers.map((answer, index) => 
+                            React.createElement('button', {
+                                key: index,
+                                onClick: () => handleAnswer(index),
+                                disabled: showFeedback,
+                                className: `p-6 text-left rounded-lg border-2 transition-all font-medium text-lg
+                                    ${showFeedback 
+                                        ? (answer.correct 
+                                            ? 'bg-green-100 border-green-500 text-green-800' 
+                                            : selectedAnswer === index 
+                                                ? 'bg-red-100 border-red-500 text-red-800'
+                                                : 'bg-gray-100 border-gray-300 text-gray-600'
+                                          )
+                                        : 'bg-white border-gray-300 hover:border-blue-500 hover:bg-blue-50 text-gray-800'
+                                    } 
+                                    ${showFeedback ? 'cursor-not-allowed' : 'cursor-pointer hover:shadow-md'}
+                                `
+                            }, answer.text)
+                        ))
+                    ]),
+
+                    // Feedback
+                    showFeedback && React.createElement('div', {
+                        className: "max-w-4xl mx-auto",
+                        key: "feedback-section"
+                    }, [
+                        React.createElement('div', {
+                            className: `p-6 rounded-lg border-2 mb-6 ${
+                                scenarios[currentScenario].answers[selectedAnswer].correct
+                                    ? 'bg-green-50 border-green-500'
+                                    : 'bg-orange-50 border-orange-500'
+                            }`,
+                            key: "feedback-message"
+                        }, React.createElement('p', {
+                            className: `text-lg font-medium ${
+                                scenarios[currentScenario].answers[selectedAnswer].correct
+                                    ? 'text-green-800'
+                                    : 'text-orange-800'
+                            }`
+                        }, scenarios[currentScenario].answers[selectedAnswer].feedback)),
+                        
+                        React.createElement('div', {
+                            className: "text-center",
+                            key: "next-button-container"
+                        }, React.createElement('button', {
+                            onClick: nextScenario,
+                            className: "bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-lg transition-colors"
+                        }, currentScenario < scenarios.length - 1 ? 'Next Scenario' : 'See Results'))
+                    ])
+                ])
+            ]));
+        }
+
+        ReactDOM.render(React.createElement(BestAIGame), document.getElementById('root'));
+    </script>
+</body>
+</html>
