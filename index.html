@@ -56,8 +56,8 @@
                 id: "scenario_1",
                 type: "video",
                 title: "Helping a Customer",
-                videoFile: "scenario1-bad-service.mp4",
-                videoDescription: "Employee ignoring customer asking about TV",
+                videoFile: "scenario1-helping-customer.mp4",
+                videoDescription: "Employee ignoring a confused customer in the electronics section",
                 scenarioText: "A customer approaches the electronics section looking confused. They clearly want help choosing a TV, but the associate continues stocking shelves without acknowledging them.",
                 question: "What was the primary customer service issue?",
                 answers: [
@@ -72,7 +72,7 @@
                 id: "scenario_2",
                 type: "video",
                 title: "Explaining a Product",
-                videoFile: "scenario2-good-service.mp4",
+                videoFile: "scenario2-explaining-product.mp4",
                 videoDescription: "Employee listening and explaining tablet features",
                 scenarioText: "A customer is interested in tablets but seems overwhelmed by the options. The associate listens carefully to their needs, asks clarifying questions, and explains features in simple terms.",
                 question: "What made this interaction effective?",
@@ -86,9 +86,11 @@
             },
             {
                 id: "scenario_3",
-                type: "text",
+                type: "video",
                 title: "Customer Complaint",
-                scenarioText: "A customer returns to Best AI after one week with a Bluetooth speaker that stopped working. They seem frustrated. The associate immediately says, 'You probably dropped it. Our return policy only covers unopened items anyway.'",
+                videoFile: "scenario3-customer-complaint.mp4",
+                videoDescription: "Associate dismissing a frustrated customer",
+                scenarioText: "A customer returns to Best AI after one week with a Bluetooth speaker that is clearly broken. They seem frustrated. The associate immediately says, 'Sir, I can't help you. Our policy is clear.'",
                 question: "What should the associate do differently?",
                 answers: [
                     { text: "Listen and offer a solution",         correct: true,  feedback: "Exactly! Listen to understand the problem first, then work together to find a solution. This shows you care about their experience." },
@@ -101,8 +103,10 @@
             },
             {
                 id: "scenario_4",
-                type: "text",
+                type: "video",
                 title: "Warranty Upselling",
+                videoFile: "scenario4-warranty-upselling.mp4",
+                videoDescription: "Associate using pushy tactics to sell a warranty",
                 scenarioText: "A customer just selected a laptop and is ready to purchase. The associate says, 'You NEED our extended warranty. Trust me, you'll regret not getting it. These laptops always break after a year.'",
                 question: "What's the main problem with this approach?",
                 answers: [
@@ -116,8 +120,10 @@
             },
             {
                 id: "scenario_5",
-                type: "text",
+                type: "video",
                 title: "Tech Support",
+                videoFile: "scenario5-tech-support.mp4",
+                videoDescription: "Associate patiently teaching elderly customer to set up smart speaker",
                 scenarioText: "An elderly customer is struggling to understand how to connect their new smart speaker to WiFi. The associate notices their confusion and says, 'Here, let me show you step-by-step. We can practice it together right here.'",
                 question: "What makes this interaction successful?",
                 answers: [
@@ -216,7 +222,7 @@
                             React.createElement('p', { className: "text-sm font-semibold text-blue-600 uppercase tracking-widest" }, "Customer Service Challenge")
                         ),
                         React.createElement('div', { className: "flex items-start gap-4 bg-blue-50 rounded-xl p-4 mb-6 border border-blue-100" },
-                            React.createElement('div', { className: "text-4xl float shrink-0" }, "👩‍💼"),
+                            React.createElement('div', { className: "w-16 h-16 rounded-full bg-gray-200 border-2 border-dashed border-gray-400 flex items-center justify-center shrink-0 text-gray-400 text-xs text-center leading-tight", style: {minWidth:"64px"} }, "Avatar"),
                             React.createElement('p', { className: "text-sm text-gray-700 leading-relaxed" }, "Welcome to Best AI! Great service builds loyal customers. Can you spot the difference between good and bad service? Click below to begin your training!")
                         ),
                         React.createElement('div', { className: "grid grid-cols-3 gap-3 mb-6 text-center" },
@@ -274,7 +280,13 @@
                     /* Header bar */
                     React.createElement('div', { className: "flex items-center justify-between mb-3 px-1" },
                         React.createElement('div', { className: "text-white font-bold text-base" }, "Best AI"),
-                        React.createElement(ScoreBadge, { score, total: scenarios.length })
+                        React.createElement('div', { className: "flex items-center gap-2" },
+                            React.createElement('button', {
+                                onClick: restart,
+                                className: "text-white/80 hover:text-white text-xs font-medium bg-white/20 hover:bg-white/30 rounded-full px-3 py-1 transition-colors"
+                            }, "↺ Restart"),
+                            React.createElement(ScoreBadge, { score, total: scenarios.length })
+                        )
                     ),
 
                     /* Progress */
